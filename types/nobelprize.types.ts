@@ -20,7 +20,7 @@ type Laureate = {
   share: string;
 };
 
-type NobelPrize = {
+export type NobelPrize = {
   year: string;
   category: string;
   laureates: Laureate[];

@@ -1,5 +1,6 @@
 import {
   Endpoints,
+  NobelPrize,
   NobelPrizeRequestDto,
   NobelPrizeResponseDto,
 } from "../../types/nobelprize.types";
@@ -39,47 +40,36 @@ export const NobelPrizeEndpoints: Endpoints = {
         }
       }
 
+      const assignPrizes = (
+        prizes: NobelPrize[],
+        argType: "firstname" | "surname"
+      ) => {
+        response.prizes = prizes.filter((prize) => {
+          const hasName = prize.laureates?.find((laureate) =>
+            laureate[argType]
+              .toLowerCase()
+              .includes(
+                (argType === "firstname" ? firstname : lastname).toLowerCase()
+              )
+          );
+
+          prize.laureates = prize.laureates?.filter((laureate) =>
+            laureate[argType]
+              .toLowerCase()
+              .includes(
+                (argType === "firstname" ? firstname : lastname).toLowerCase()
+              )
+          );
+
+          return hasName;
+        });
+      };
+
       const filterByName = (argType: "firstname" | "surname") => {
         if (response.prizes.length) {
-          response.prizes = response.prizes.filter((prize) => {
-            const hasName = prize.laureates?.find((laureate) =>
-              laureate[argType]
-                .toLowerCase()
-                .includes(
-                  (argType === "firstname" ? firstname : lastname).toLowerCase()
-                )
-            );
-
-            prize.laureates = prize.laureates?.filter((laureate) =>
-              laureate[argType]
-                .toLowerCase()
-                .includes(
-                  (argType === "firstname" ? firstname : lastname).toLowerCase()
-                )
-            );
-
-            return hasName;
-          });
+          assignPrizes(response.prizes, argType);
         } else {
-          response.prizes = json.prizes.filter((prize) => {
-            const hasName = prize.laureates?.find((laureate) =>
-              laureate[argType]
-                .toLowerCase()
-                .includes(
-                  (argType === "firstname" ? firstname : lastname).toLowerCase()
-                )
-            );
-
-            prize.laureates = prize.laureates?.filter((laureate) =>
-              laureate[argType]
-                .toLowerCase()
-                .includes(
-                  (argType === "firstname" ? firstname : lastname).toLowerCase()
-                )
-            );
-
-            return hasName;
-          });
+          assignPrizes(json.prizes, argType);
         }
       };
 
