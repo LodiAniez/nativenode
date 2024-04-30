@@ -11,3 +11,21 @@ export type Endpoints = Record<
   EndpointsPaths,
   <T>(args?: T) => Promise<string>
 >;
+
+type Laureate = {
+  id: string;
+  firstname: string;
+  surname: string;
+  motivation: string;
+  share: string;
+};
+
+type NobelPrize = {
+  year: string;
+  category: string;
+  laureates: Laureate[];
+};
+
+export type NobelPrizeResponseDto = {
+  prizes: NobelPrize[];
+};
